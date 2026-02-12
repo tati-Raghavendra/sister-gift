@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hug Day Surprise | Sister Edition</title>
+    <style>
+        :root {
+            --primary: #d81b60;
+            --bg-start: #fdf2f5;
+            --bg-end: #fff0f6;
+            --accent: #ff9800;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            transition: all 1s ease;
+            padding-bottom: 50px;
+        }
+
+        /* Floating elements */
+        .heart {
+            position: fixed;
+            font-size: 20px;
+            color: var(--primary);
+            user-select: none;
+            pointer-events: none;
+            z-index: 999;
+            animation: floatUp 4s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container { padding: 40px 20px; width: 100%; max-width: 500px; text-align: center; }
+
+        h1 { color: var(--primary); font-size: 2.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+
+        /* The Interaction Box */
+        .mood-box {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        #big-emoji {
+            font-size: 100px;
+            display: block;
+            margin: 20px 0;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+        }
+
+        input[type=range] {
+            width: 90%;
+            height: 10px;
+            border-radius: 5px;
+            background: #eee;
+            outline: none;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* The Reveal Styles */
+        #reveal-section {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 1.5s ease;
+        }
+
+        /* Polaroid Photo Style */
+        .photo-frame {
+            background: white;
+            padding: 15px 15px 40px 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            transform: rotate(-3deg);
+            margin: 20px auto;
+            max-width: 250px;
+            border-radius: 5px;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+            display: block;
+        }
+
+        .btn-hug {
+            background: linear-gradient(to right, #ff4081, #d81b60);
+            color: white;
+            border: none;
+            padding: 15px 45px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(216, 27, 96, 0.3);
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-hug:hover { transform: scale(1.05); }
+
+        .lyrics { color: #880e4f; font-weight: bold; margin: 20px 0; font-size: 1.1rem; }
+
+        .voucher {
+            border: 3px dashed var(--accent);
+            padding: 20px;
+            background: #fffdf0;
+            border-radius: 15px;
+            margin-top: 25px;
+            position: relative;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Happy Hug Day! 🤗</h1>
+    <p style="color: #666;">I said no more gifts... but I lied! 😉</p>
+
+    <div class="mood-box">
+        <label id="status-label" style="font-size: 1.2rem;">Sis Status: <b style="color:red">Angry Bird 😡</b></label>
+        <span id="big-emoji">😡</span>
+        
+        <input type="range" id="moodSlider" min="1" max="5" value="1" oninput="updateMood(this.value)">
+        <p style="font-size: 0.8rem; color: #999; margin-top: 10px;">Slide to transform the Angry Bird!</p>
+
+        <div id="reveal-section">
+            <div class="photo-frame">
+                <img src="C:\Users\tatir\OneDrive\Desktop\project\hug\sister.jpeg" alt="Best Sister Ever">
+                <p style="margin-top:15px; color:#333; font-family: 'Brush Script MT', cursive; font-size: 1.2rem;">Best Sister Forever ❤️</p>
+            </div>
+
+            <p class="lyrics">"Nuvvunte Chale... inkemi oddu!" 🎶</p>
+            
+            <button class="btn-hug" onclick="startCelebration()">Get Your Hug ❤️</button>
+            
+            <div class="voucher">
+                <h4 style="margin:0; color:#e67e22;">🎁 OFFICIAL SNACK VOUCHER</h4>
+                <p style="font-size: 0.8rem; margin:10px 0;">This coupon is valid for <b>ONE FREE SNACK</b> from your brother!</p>
+                <small style="color:#999;">(Condition: No more dull faces today!)</small>
+            </div>
+
+            <audio id="mySong">
+                <source src="C:\Users\tatir\OneDrive\Desktop\project\hug\song.mpeg" type="audio/mpeg">
+            </audio>
+        </div>
+    </div>
+</div>
+
+<script>
+    const song = document.getElementById('mySong');
+
+    function updateMood(val) {
+        const label = document.querySelector('#status-label b');
+        const emoji = document.getElementById('big-emoji');
+        const reveal = document.getElementById('reveal-section');
+
+        const moods = [
+            {t: "Angry Bird 😡", e: "😡", c: "red"},
+            {t: "Dull Crow 🐦‍⬛", e: "🐦‍⬛", c: "#555"},
+            {t: "Getting Cheerful 🤨", e: "🤨", c: "#ff9800"},
+            {t: "Almost Smiling 🙂", e: "🙂", c: "#4caf50"},
+            {t: "The Queen 🦚✨", e: "🦚", c: "#d81b60"}
+        ];
+
+        const mood = moods[val-1];
+        label.innerText = mood.t;
+        label.style.color = mood.c;
+        emoji.innerText = mood.e;
+
+        if (val == 5) {
+            reveal.style.display = "block";
+            document.body.style.background = "linear-gradient(135deg, #fff0f6 0%, #ffdde1 100%)";
+            createHeart(); 
+            song.load(); // Prepare the song
+        } else {
+            reveal.style.display = "none";
+        }
+    }
+
+    function createHeart() {
+        for(let i=0; i<15; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerText = i % 2 === 0 ? '❤️' : '🦚';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, i * 200);
+        }
+    }
+
+    function startCelebration() {
+        // Force the music to play on click
+        song.play().catch(error => {
+            console.log("Playback failed. Please check if song.mp3 exists.");
+            alert("Please make sure your song file is named 'song.mp3'");
+        });
+        
+        createHeart();
+        alert("A big Virtual Hug is coming your way! 🤗❤️");
+    }
+</script>
+
+</body>
+</html>
